@@ -21,17 +21,16 @@ public class Destination {
     @Column(nullable = false)
     private String description;
 
-    private User user;
+   // private User user;
 
     public Destination() {
     }
 
-    public Destination(String country, String city, String image, String description, User user) {
+    public Destination(String country, String city, String image, String description) {
         this.country = country;
         this.city = city;
         this.image = image;
         this.description = description;
-        this.user = user;
     }
 
     public Long getId() {
@@ -69,12 +68,6 @@ public class Destination {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
+
+
