@@ -2,6 +2,8 @@ package com.example.happy_travel.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -9,8 +11,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column
     private String username;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @Column(nullable = false, unique = true, length = 30)
+    private List<Destination> destinations;
 
     @Column(nullable = false, unique = true, length = 50)
     private String email;

@@ -21,7 +21,10 @@ public class Destination {
     @Column(nullable = false)
     private String description;
 
-   // private User user;
+    @ManyToOne
+    @JoinColumn(name = "destinations")
+    private User user;
+
 
     public Destination() {
     }
