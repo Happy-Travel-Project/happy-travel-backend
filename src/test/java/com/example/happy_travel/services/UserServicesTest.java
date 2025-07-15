@@ -1,0 +1,51 @@
+package com.example.happy_travel.services;
+
+import com.example.happy_travel.dtos.user.UserResponse;
+import com.example.happy_travel.models.User;
+import com.example.happy_travel.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class UserServicesTest {
+
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserService userService;
+    private User user1;
+    private User user2;
+
+    @BeforeEach
+    void setup(){
+        user1 = new User ("More", "more@gmail.com", "2yU#2yU#") ;
+        user2 = new User ("Loli", "moredev@gmail.com", "2yU#2yU#");
+    }
+
+    @Test
+    void getAllUsers_whenUsersExist_returnsListOfUsersResponse(){
+        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+
+        List<UserResponse> result = userService.getAllUsers();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("More",result.getFirst().username());
+        assertEquals("more@gmail.com", result.getFirst().email());
+        assertEquals("Loli",result.get(1).username());
+        assertEquals("moredev@gmail.com", result.get(1).email());
+
+        verify(userRepository, times(1)).findAll();
+    }
+}
