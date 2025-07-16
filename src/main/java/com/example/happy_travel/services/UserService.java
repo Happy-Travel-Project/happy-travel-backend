@@ -5,6 +5,7 @@ import com.example.happy_travel.dtos.user.UserRequest;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.UserRepository;
+import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
