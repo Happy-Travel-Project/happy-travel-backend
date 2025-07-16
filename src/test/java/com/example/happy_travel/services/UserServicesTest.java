@@ -1,5 +1,6 @@
 package com.example.happy_travel.services;
 
+import com.example.happy_travel.dtos.user.UserRequest;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.UserRepository;
@@ -24,18 +25,22 @@ public class UserServicesTest {
 
     @InjectMocks
     private UserService userService;
-    private User user1;
-    private User user2;
+    private User user1Entity;
+    private User user2Entity;
+    private UserRequest user1Request;
+    private UserResponse user1Response;
 
     @BeforeEach
     void setup(){
-        user1 = new User ("More", "more@gmail.com", "2yU#2yU#") ;
-        user2 = new User ("Loli", "moredev@gmail.com", "2yU#2yU#");
+        user1Entity = new User ("More", "more@gmail.com", "2yU#2yU#") ;
+        user2Entity = new User ("Loli", "moredev@gmail.com", "2yU#2yU#");
+        user1Request = new UserRequest("More", "more@gmail.com", "2yU#2yU#");
+        user1Response = new UserResponse(1L, "More", "more@gmail.com");
     }
 
     @Test
     void getAllUsers_whenUsersExist_returnsListOfUsersResponse(){
-        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+        when(userRepository.findAll()).thenReturn(List.of(user1Entity, user2Entity));
 
         List<UserResponse> result = userService.getAllUsers();
 
@@ -47,5 +52,22 @@ public class UserServicesTest {
         assertEquals("moredev@gmail.com", result.get(1).email());
 
         verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void addUser_whenCorrectRequest_returnsUserResponse(){
+    when(userRepository.existsByUsername(user1Request.username())).thenReturn(false);
+    when(userRepository.save(any(User.class))).thenReturn(user1Entity);
+
+    UserResponse result = userService.addUser(user1Request);
+
+    assertNotNull(result);
+    assertEquals(UserResponse.class, result.getClass());
+    assertEquals("More", result.username());
+    assertEquals("more@gmail.com", result.email());
+
+    verify(userRepository, times(1)).existsByUsername(user1Request.username());
+    verify(userRepository, times(1)).save(any(User.class));
+
     }
 }

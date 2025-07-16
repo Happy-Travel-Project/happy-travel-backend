@@ -27,6 +27,9 @@ public class UserService {
     }
 
     public UserResponse addUser(UserRequest userRequest) {
+        if (userRepository.existsByUsername(userRequest.username())){
+        throw new RuntimeException("Username already exists, please choose another");
+        }
         User newUser = UserMapper.toEntity(userRequest);
         User savedUser = userRepository.save(newUser);
         return UserMapper.toDto(savedUser);
