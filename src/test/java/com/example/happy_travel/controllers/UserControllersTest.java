@@ -2,6 +2,7 @@ package com.example.happy_travel.controllers;
 
 import com.example.happy_travel.dtos.user.UserRequest;
 import com.example.happy_travel.dtos.user.UserResponse;
+import com.example.happy_travel.models.User;
 import com.example.happy_travel.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -17,6 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,6 +47,8 @@ public class UserControllersTest {
     private UserResponse user1Response;
     private UserResponse user2Response;
     private UserRequest user1Request;
+    private Long user1Id;
+    private User user1Entity;
 
     @BeforeEach
     void setUp() {
@@ -53,6 +58,8 @@ public class UserControllersTest {
         user1Request  = new UserRequest("Ana", "ana@gmail.com", "2yU#2yU#");
         userResponses.add(user1Response);
         userResponses.add(user2Response);
+        user1Id = 1L;
+        user1Entity = new User("Ana", "ana@gmail.com","2yU#2yU#");
     }
 
     @Test
@@ -71,6 +78,17 @@ public class UserControllersTest {
     }
 
     @Test
+    void getUserById_whenUserExists_returnsUser() throws Exception {
+        Optional<User> userOptional = Optional.of(user1Entity);
+        given(userService.getUserById(user1Id)).willReturn(userOptional);
+
+        mockMvc.perform(get("/api/users/{id}",user1Id).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("Ana"))
+                .andExpect(jsonPath("$.email").value("ana@gmail.com"));
+    }
+
+    @Test
     void addUser_whenCorrectRequest_returnsUserResponse() throws Exception {
 
         UserRequest request = new UserRequest("Ana","ana@gmail.com", "2yU#2yU#");
@@ -86,4 +104,7 @@ public class UserControllersTest {
                 .andExpect(jsonPath("$.username").value("Ana"))
                 .andExpect(jsonPath("$.email").value("ana@gmail.com"));
     }
+
+
+
 }
