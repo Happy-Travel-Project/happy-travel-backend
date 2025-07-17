@@ -1,11 +1,13 @@
 package com.example.happy_travel.controllers;
 
+import com.example.happy_travel.dtos.user.UserRequest;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,9 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,13 +41,16 @@ public class UserControllersTest {
     private ObjectMapper objectMapper;
 
     private List<UserResponse> userResponses;
+    private UserResponse user1Response;
+    private UserResponse user2Response;
+    private UserRequest user1Request;
 
     @BeforeEach
     void setUp() {
         userResponses = new ArrayList<>();
-        UserResponse user1Response = new UserResponse(1L, "Ana", "ana@gmail.com");
-        UserResponse user2Response = new UserResponse(2L, "Paola", "paola@gmail.com");
-
+        user1Response = new UserResponse(1L, "Ana", "ana@gmail.com");
+        user2Response = new UserResponse(2L, "Paola", "paola@gmail.com");
+        user1Request  = new UserRequest("Ana", "ana@gmail.com", "2yU#2yU#");
         userResponses.add(user1Response);
         userResponses.add(user2Response);
     }
@@ -59,5 +68,22 @@ public class UserControllersTest {
                 .andExpect(jsonPath("$[1].username").value("Paola"))
                 .andExpect(jsonPath("$[0].email").value("ana@gmail.com"))
                 .andExpect(jsonPath("$[1].email").value("paola@gmail.com"));
+    }
+
+    @Test
+    void addUser_whenCorrectRequest_returnsUserResponse() throws Exception {
+
+        UserRequest request = new UserRequest("Ana","ana@gmail.com", "2yU#2yU#");
+        UserResponse response = new UserResponse(1L,"Ana", "ana@gmail.com");
+
+        given(userService.addUser(Mockito.any(UserRequest.class))).willReturn(response);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.username").value("Ana"))
+                .andExpect(jsonPath("$.email").value("ana@gmail.com"));
     }
 }
