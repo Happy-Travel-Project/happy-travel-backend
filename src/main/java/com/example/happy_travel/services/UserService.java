@@ -8,6 +8,7 @@ import com.example.happy_travel.repositories.UserRepository;
 import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -36,14 +37,14 @@ public class UserService {
         return UserMapper.toDto(savedUser);
     }
 
-//    public UserResponse updateUser(Long id, UserRequest userRequest) {
-//        User updatedUser = userRepository.findById(id);
-//        updatedUser.setUsername(userRequest.username());
-//        updatedUser.setEmail(userRequest.email());
-//        updatedUser.setPassword(userRequest.password());
-//        User newUser = userRepository.save(updatedUser);
-//        return UserMapper.toDto(newUser);
-//    }
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
+        User updatedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id " + id));
+        updatedUser.setUsername(userRequest.username());
+        updatedUser.setEmail(userRequest.email());
+        updatedUser.setPassword(userRequest.password());
+        User newUser = userRepository.save(updatedUser);
+        return UserMapper.toDto(newUser);
+    }
 
     public void deleteUser(Long id) {
         getUserById(id);
