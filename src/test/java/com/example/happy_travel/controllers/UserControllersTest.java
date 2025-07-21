@@ -105,6 +105,11 @@ public class UserControllersTest {
                 .andExpect(jsonPath("$.email").value("ana@gmail.com"));
     }
 
+    // Add updateUser test
 
-
+    @Test
+    void deleteUser_whenIdExists_returnsNoContent() throws Exception{
+        mockMvc.perform(delete("/api/users/{id}", user1Id))
+                .andExpect(status().isNoContent());
+    }
 }
