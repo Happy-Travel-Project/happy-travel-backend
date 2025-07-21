@@ -75,6 +75,4 @@ public class UserServicesTest {
         Exception exception = assertThrows(RuntimeException.class, () -> userService.addUser(user1Request));
         assertEquals("Username already exists, please choose another", exception.getMessage());
     }
-
-
 }
