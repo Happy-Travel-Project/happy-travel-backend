@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,9 +29,11 @@ public class UserServicesTest {
     private User user2Entity;
     private UserRequest user1Request;
     private UserResponse user1Response;
+    private Long user1Id;
 
     @BeforeEach
     void setup(){
+        user1Id = 1L;
         user1Entity = new User ("More", "more@gmail.com", "2yU#2yU#") ;
         user2Entity = new User ("Loli", "moredev@gmail.com", "2yU#2yU#");
         user1Request = new UserRequest("More", "more@gmail.com", "2yU#2yU#");
@@ -74,5 +77,19 @@ public class UserServicesTest {
         when(userRepository.existsByUsername(user1Request.username())).thenReturn(true);
         Exception exception = assertThrows(RuntimeException.class, () -> userService.addUser(user1Request));
         assertEquals("Username already exists, please choose another", exception.getMessage());
+    }
+
+    //Add updateUser test
+
+    @Test
+    void deleteUser_whenUserExists_returnsVoid(){
+        when(userRepository.findById(eq(user1Id))).thenReturn(Optional.of(user1Entity));
+        doNothing().when(userRepository).deleteById(user1Id);
+
+        userService.deleteUser(user1Id);
+
+        verify(userRepository, times(1)).findById(user1Id);
+        verify(userRepository, times(1)).deleteById(user1Id);
+
     }
 }
