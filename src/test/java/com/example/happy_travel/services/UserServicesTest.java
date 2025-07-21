@@ -28,8 +28,11 @@ public class UserServicesTest {
     private User user1Entity;
     private User user2Entity;
     private UserRequest user1Request;
-    private UserResponse user1Response;
+    private UserRequest user1UpdatedRequest;
+    private UserResponse user1ExpectedRequest;
     private Long user1Id;
+    private User userEntityWithId;
+    private User userEntityWithIdUpdated;
 
     @BeforeEach
     void setup(){
@@ -37,7 +40,10 @@ public class UserServicesTest {
         user1Entity = new User ("More", "more@gmail.com", "2yU#2yU#") ;
         user2Entity = new User ("Loli", "moredev@gmail.com", "2yU#2yU#");
         user1Request = new UserRequest("More", "more@gmail.com", "2yU#2yU#");
-        user1Response = new UserResponse(1L, "More", "more@gmail.com");
+        user1UpdatedRequest = new UserRequest("More", "more@gmail.com", "2yU#2yU#");
+        user1ExpectedRequest = new UserResponse(1L, "More", "morena@gmail.com");
+        userEntityWithId = new User(1L, "More", "more@gmail.com", "2yU#2yU#");
+        userEntityWithIdUpdated = new User(1L, "More", "morena@gmail.com", "2yU#2yU#");
     }
 
     @Test
@@ -79,7 +85,17 @@ public class UserServicesTest {
         assertEquals("Username already exists, please choose another", exception.getMessage());
     }
 
-    //Add updateUser test
+    @Test
+    void updateUser_whenUserExists_returnsUserResponse() {
+        when(userRepository.findById(user1Id)).thenReturn(Optional.of(userEntityWithId));
+        when(userRepository.save(any(User.class))).thenReturn(userEntityWithIdUpdated);
+
+        UserResponse result = userService.updateUser(user1Id, user1UpdatedRequest);
+
+        assertEquals(user1ExpectedRequest, result);
+        verify(userRepository, times(1)).findById(user1Id);
+        verify(userRepository, times(1)).save(any(User.class));
+    }
 
     @Test
     void deleteUser_whenUserExists_returnsVoid(){
