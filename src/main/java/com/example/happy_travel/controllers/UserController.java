@@ -31,8 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
 
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
-        User user = userService.getUserById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User don´t found with ID: "+ id));
-        UserResponse userResponse = UserMapper.toDto(user);
+        UserResponse userResponse = userService.getUserResponseById(id);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
