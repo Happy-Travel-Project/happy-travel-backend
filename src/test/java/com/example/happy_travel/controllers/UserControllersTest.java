@@ -79,8 +79,7 @@ public class UserControllersTest {
 
     @Test
     void getUserById_whenUserExists_returnsUser() throws Exception {
-        Optional<User> userOptional = Optional.of(user1Entity);
-        given(userService.getUserById(user1Id)).willReturn(userOptional);
+                given(userService.getUserResponseById(user1Id)).willReturn(user1Response);
 
         mockMvc.perform(get("/api/users/{id}",user1Id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
