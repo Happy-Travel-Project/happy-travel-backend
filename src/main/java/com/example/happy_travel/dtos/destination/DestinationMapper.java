@@ -4,10 +4,10 @@ import com.example.happy_travel.models.Destination;
 
 public class DestinationMapper {
     public static Destination toEntity(DestinationRequest destinationRequest){
-        return new Destination(destinationRequest.country(), destinationRequest.city(), destinationRequest.image(), destinationRequest.description());
+        return new Destination(destinationRequest.title(), destinationRequest.country(), destinationRequest.city(), destinationRequest.image(), destinationRequest.description());
     }
 
     public static DestinationResponse toDto(Destination destination){
-        return new DestinationResponse(destination.getId(), destination.getCountry(), destination.getCity(), destination.getImage(), destination.getDescription());
+        return new DestinationResponse(destination.getId(), destination.getTitle(), destination.getCountry(), destination.getCity(), destination.getImage(), destination.getDescription());
     }
 }
