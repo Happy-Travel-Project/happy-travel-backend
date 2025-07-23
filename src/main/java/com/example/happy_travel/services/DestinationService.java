@@ -37,7 +37,7 @@ public class DestinationService {
 
     public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest) {
         Destination updateDestination = destinationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
-
+        updateDestination.setTitle(destinationRequest.title());
         updateDestination.setCountry(destinationRequest.country());
         updateDestination.setCity(destinationRequest.city());
         updateDestination.setImage(destinationRequest.image());

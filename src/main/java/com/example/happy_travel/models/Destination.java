@@ -40,6 +40,15 @@ public class Destination {
         this.description = description;
     }
 
+    public Destination(Long id, String title, String country, String city, String image, String description) {
+        this.id = id;
+        this.title = title;
+        this.country = country;
+        this.city = city;
+        this.image = image;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
