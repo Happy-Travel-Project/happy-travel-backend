@@ -22,7 +22,7 @@ public class Destination {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "destinations")
+    @JoinColumn(name = "user")
     private User user;
 
 
