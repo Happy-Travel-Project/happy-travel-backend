@@ -34,7 +34,7 @@ public class DestinationController {
         return new ResponseEntity<>(createdDestination, HttpStatus.CREATED);
     }
 
-    @PutMapping("/destination/{id}")
+    @PutMapping("/destinations/{id}")
     public ResponseEntity<DestinationResponse> updateDestination(@PathVariable Long id, @Valid @RequestBody DestinationRequest destinationRequest) {
         DestinationResponse updateDestination = destinationService.updateDestination(id, destinationRequest);
         return ResponseEntity.ok(updateDestination);
