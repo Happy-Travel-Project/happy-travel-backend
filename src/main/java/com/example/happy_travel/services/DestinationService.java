@@ -6,6 +6,8 @@ import com.example.happy_travel.dtos.destination.DestinationResponse;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.models.Destination;
 import java.util.NoSuchElementException;
+
+import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -24,6 +26,7 @@ public class DestinationService {
                 .map(destination -> DestinationMapper.toDto(destination))
                 .toList();
     }
+
     public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest){
         Destination updateDestination = destinationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
 
@@ -31,14 +34,15 @@ public class DestinationService {
         updateDestination.setCity(destinationRequest.city());
         updateDestination.setImage(destinationRequest.image());
         updateDestination.setDescription(destinationRequest.description());
-    public void deleteDestination(Long id){
-        var destination = destinationRepository.findById(id);
-
         Destination newDestination = destinationRepository.save(updateDestination);
 
         return DestinationMapper.toDto(newDestination);
-        if (destination.isEmpty()){
-            throw new NoSuchElementException("Destination wit ID" + id + "not found");
+    }
+
+    public void deleteDestination(Long id){
+        if (!destinationRepository.existsById(id)){
+            throw new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString());
         }
+        destinationRepository.deleteById(id);
     }
 }
