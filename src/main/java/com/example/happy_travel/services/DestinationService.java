@@ -30,7 +30,6 @@ public class DestinationService {
         if (destinationRepository.existsByTitle(destinationRequest.title())) {
             throw new EntityAlreadyExistsException(Destination.class.getSimpleName(), "title", destinationRequest.title());
         }
-        destinationRepository.deleteById(id);
         Destination newDestination = DestinationMapper.toEntity(destinationRequest);
         Destination savedDestination = destinationRepository.save(newDestination);
         return DestinationMapper.toDto(savedDestination);
