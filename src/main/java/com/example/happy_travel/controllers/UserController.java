@@ -1,20 +1,17 @@
 package com.example.happy_travel.controllers;
 
-import com.example.happy_travel.dtos.user.UserMapper;
 import com.example.happy_travel.dtos.user.UserRequest;
 import com.example.happy_travel.dtos.user.UserResponse;
-import com.example.happy_travel.models.User;
 import com.example.happy_travel.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("")
 public class UserController {
 
     private final UserService userService;
@@ -35,7 +32,7 @@ public class UserController {
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserRequest userRequest) {
         UserResponse createdUser = userService.addUser(userRequest);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
