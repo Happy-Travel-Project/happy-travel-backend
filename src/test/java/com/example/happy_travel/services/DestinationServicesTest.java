@@ -1,6 +1,8 @@
 package com.example.happy_travel.services;
 
+import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
+import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.models.Destination;
 import com.example.happy_travel.repositories.DestinationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,9 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,11 +26,23 @@ public class DestinationServicesTest {
     @InjectMocks
     private DestinationService destinationService;
     private Destination destination1Entity;
+    private Destination destination1EntityWithId;
+    private Destination destination1EntityWithIdUpdated;
+    private  DestinationResponse destination1ExpectedResponse;
+    private DestinationRequest destination1UpdatedRequest;
     private Destination destination2Entity;
+    private Long destination1Id;
+    private Long notExistentId;
 
     @BeforeEach
     void setup() {
+        destination1Id = 1L;
+        notExistentId = 5L;
         destination1Entity = new Destination("A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
+        destination1EntityWithId = new Destination(1L, "A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
+        destination1EntityWithIdUpdated = new Destination(1L, "A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
+        destination1ExpectedResponse = new DestinationResponse(1L, "A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
+        destination1UpdatedRequest = new DestinationRequest("A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
         destination2Entity = new Destination("The northern lights in Norway", "Norway", "Lofoten", "https://images.lge.com.sg/images/product-placeholder.png", "Our bold claim is that this part of Norway, with its multiple islands, deep fjords and steep mountains, is among the world's most beautiful and interesting places in which to see the northern lights.");
     }
 
@@ -52,6 +66,36 @@ public class DestinationServicesTest {
         assertEquals("Our bold claim is that this part of Norway, with its multiple islands, deep fjords and steep mountains, is among the world's most beautiful and interesting places in which to see the northern lights.", result.get(1).description());
 
         verify(destinationRepository, times(1)).findAll();
+    }
+
+    @Test
+    void updateDestination_whenDestinationExists_returnsDestinationResponse() {
+        when(destinationRepository.findById(destination1Id)).thenReturn(Optional.of(destination1EntityWithId));
+        when(destinationRepository.save(any(Destination.class))).thenReturn(destination1EntityWithIdUpdated);
+
+        DestinationResponse result = destinationService.updateDestination(destination1Id, destination1UpdatedRequest);
+
+        assertEquals(destination1ExpectedResponse, result);
+        assertEquals("A wonderful trip for those who love nature and animals", result.title());
+        assertEquals("Brazil", result.country());
+        assertEquals("Ilha Grande", result.city());
+        assertEquals("https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", result.image());
+        assertEquals("Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", result.description());
+
+        verify(destinationRepository, times(1)).findById(destination1Id);
+        verify(destinationRepository, times(1)).save(any(Destination.class));
+    }
+
+    @Test
+    void updateDestination_whenDestinationDoesNotExists_returnsEntityNotFoundException(){
+        when(destinationRepository.findById(notExistentId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.updateDestination(notExistentId, destination1UpdatedRequest));
+
+        assertEquals("Destination with id 5 was not found", exception.getMessage());
+
+        verify(destinationRepository, times(1)).findById(notExistentId);
+        verify(destinationRepository, never()).save(any(Destination.class));
     }
 
 }
