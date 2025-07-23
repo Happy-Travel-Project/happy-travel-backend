@@ -4,19 +4,18 @@ import com.example.happy_travel.dtos.destination.DestinationMapper;
 import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
+import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
 import com.example.happy_travel.models.Destination;
-import java.util.NoSuchElementException;
-
-import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class DestinationService {
+
     public final DestinationRepository destinationRepository;
 
-    public DestinationService(DestinationRepository destinationRepository){
+    public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
     }
 
@@ -27,7 +26,17 @@ public class DestinationService {
                 .toList();
     }
 
-    public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest){
+    public DestinationResponse addDestination(DestinationRequest destinationRequest) {
+        if (destinationRepository.existsByTitle(destinationRequest.title())) {
+            throw new EntityAlreadyExistsException(Destination.class.getSimpleName(), "title", destinationRequest.title());
+        }
+        destinationRepository.deleteById(id);
+        Destination newDestination = DestinationMapper.toEntity(destinationRequest);
+        Destination savedDestination = destinationRepository.save(newDestination);
+        return DestinationMapper.toDto(savedDestination);
+    }
+
+    public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest) {
         Destination updateDestination = destinationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
 
         updateDestination.setCountry(destinationRequest.country());
@@ -39,10 +48,9 @@ public class DestinationService {
         return DestinationMapper.toDto(newDestination);
     }
 
-    public void deleteDestination(Long id){
-        if (!destinationRepository.existsById(id)){
+    public void deleteDestination(Long id) {
+        if (!destinationRepository.existsById(id)) {
             throw new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString());
         }
-        destinationRepository.deleteById(id);
     }
 }
