@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,5 +73,11 @@ public class DestinationControllersTest {
             .andExpect(jsonPath("$.city").value("Ilha Grande"))
             .andExpect(jsonPath("$.image").value("https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png"))
             .andExpect(jsonPath("$.description").value("Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone."));
+    }
+
+    @Test
+    void deleteDestination_whenIdExists_returnsNoContent() throws Exception{
+        mockMvc.perform(delete("/api/destination/{id}", destination1Id))
+                .andExpect(status().isNoContent());
     }
 }
