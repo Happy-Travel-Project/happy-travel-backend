@@ -1,7 +1,6 @@
 package com.example.happy_travel.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "destinations")
@@ -28,6 +27,7 @@ public class Destination {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 
     public Destination() {
     }
