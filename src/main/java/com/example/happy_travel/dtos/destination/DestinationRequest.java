@@ -5,6 +5,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record DestinationRequest(
+        @NotBlank(message = "Title must not be blank")
+        @Size(min =5, max =100 , message = "Title must be between 5 and 100 characters")
+        String title,
+
         @NotBlank(message = "Country must not be blank")
         @Size(min =2, max =50 , message = "Country must be between 2 and 50 characters")
         String country,
