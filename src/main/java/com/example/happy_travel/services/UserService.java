@@ -34,7 +34,7 @@ public class UserService {
 
     public UserResponse addUser(UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.username())){
-        throw new EntityAlreadyExistsException(User.class.getSimpleName(), "username", userRequest.usernamegit());
+        throw new EntityAlreadyExistsException(User.class.getSimpleName(), "username", userRequest.username());
         }
         User newUser = UserMapper.toEntity(userRequest);
         User savedUser = userRepository.save(newUser);
