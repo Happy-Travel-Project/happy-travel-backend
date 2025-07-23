@@ -21,9 +21,11 @@ public class DestinationController {
     }
 
     @PutMapping("/destination/{id}")
-    public ResponseEntity<DestinationResponse> updateDestination(@PathVariable Long id, @Valid @RequestBody DestinationRequest destinationRequest){
+    public ResponseEntity<DestinationResponse> updateDestination(@PathVariable Long id, @Valid @RequestBody DestinationRequest destinationRequest) {
         DestinationResponse updateDestination = destinationService.updateDestination(id, destinationRequest);
         return ResponseEntity.ok(updateDestination);
+    }
+
     @GetMapping("/destinations")
     public ResponseEntity<List<DestinationResponse>> getAllDestinations() {
         List<DestinationResponse> destinations = destinationService.getAllDestinations();
