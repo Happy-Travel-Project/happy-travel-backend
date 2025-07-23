@@ -28,7 +28,7 @@ public class DestinationController {
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/destinations")
     public ResponseEntity<DestinationResponse> addDestination(@Valid @RequestBody DestinationRequest destinationRequest) {
         DestinationResponse createdDestination = destinationService.addDestination(destinationRequest);
         return new ResponseEntity<>(createdDestination, HttpStatus.CREATED);
