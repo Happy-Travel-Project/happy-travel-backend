@@ -51,5 +51,6 @@ public class DestinationService {
         if (!destinationRepository.existsById(id)) {
             throw new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString());
         }
+        destinationRepository.deleteById(id);
     }
 }

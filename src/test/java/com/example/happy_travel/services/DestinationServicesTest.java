@@ -107,4 +107,15 @@ public class DestinationServicesTest {
         verify(destinationRepository, never()).save(any(Destination.class));
     }
 
+    @Test
+    void deleteDestination_whenDestinationExists_returnsVoid(){
+        when(destinationRepository.findById(eq(destination1Id))).thenReturn(Optional.of(destination1Entity));
+        doNothing().when(destinationRepository).deleteById(destination1Id);
+
+        destinationService.deleteDestination(destination1Id);
+
+        verify(destinationRepository, times(1)).findById(destination1Id);
+        verify(destinationRepository, times(1)).deleteById(destination1Id);
+
+    }
 }

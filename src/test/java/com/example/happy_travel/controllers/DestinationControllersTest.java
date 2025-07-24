@@ -2,8 +2,6 @@ package com.example.happy_travel.controllers;
 
 import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
-import com.example.happy_travel.dtos.user.UserRequest;
-import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.models.Destination;
 import com.example.happy_travel.services.DestinationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +21,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -100,6 +99,26 @@ public class DestinationControllersTest {
     }
 
     @Test
+    void addDestination_whenCorrectRequest_returnsDestinationResponse() throws Exception {
+
+        DestinationRequest request = new DestinationRequest("Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
+        DestinationResponse response = new DestinationResponse(1L,"Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
+
+        given(destinationService.addDestination(Mockito.any(DestinationRequest.class))).willReturn(response);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/destinations").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Eiffel Tower"))
+                .andExpect(jsonPath("$.country").value("France"))
+                .andExpect(jsonPath("$.city").value("Paris"))
+                .andExpect(jsonPath("$.image").value("https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg"))
+                .andExpect(jsonPath("$.description").value("Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it."));
+    }
+
+    @Test
     void updateDestination_whenCorrectRequest_isOk() throws Exception{
     given(destinationService.updateDestination(anyLong(), any(DestinationRequest.class))).willReturn(destination1ExpectedResponse);
 
@@ -127,22 +146,8 @@ public class DestinationControllersTest {
     }
 
     @Test
-    void addDestination_whenCorrectRequest_returnsDestinationResponse() throws Exception {
-
-        DestinationRequest request = new DestinationRequest("Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
-        DestinationResponse response = new DestinationResponse(1L,"Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
-
-        given(destinationService.addDestination(Mockito.any(DestinationRequest.class))).willReturn(response);
-
-        String json = objectMapper.writeValueAsString(request);
-
-        mockMvc.perform(post("/destinations").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.title").value("Eiffel Tower"))
-                .andExpect(jsonPath("$.country").value("France"))
-                .andExpect(jsonPath("$.city").value("Paris"))
-                .andExpect(jsonPath("$.image").value("https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg"))
-                .andExpect(jsonPath("$.description").value("Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it."));
+    void deleteDestination_whenIdExists_returnsNoContent() throws Exception{
+        mockMvc.perform(delete("/destinations/{id}", destination1Id))
+                .andExpect(status().isNoContent());
     }
 }

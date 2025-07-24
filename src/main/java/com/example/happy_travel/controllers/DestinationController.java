@@ -40,4 +40,9 @@ public class DestinationController {
         return ResponseEntity.ok(updateDestination);
     }
 
+    @DeleteMapping("/destinations/{id}")
+    public ResponseEntity<Object> deleteDestination(@PathVariable Long id){
+        destinationService.deleteDestination(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
