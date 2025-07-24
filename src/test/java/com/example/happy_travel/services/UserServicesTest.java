@@ -82,7 +82,7 @@ public class UserServicesTest {
     void  addUser_whenUsernameAlreadyExists_throwsException(){
         when(userRepository.existsByUsername(user1Request.username())).thenReturn(true);
         Exception exception = assertThrows(RuntimeException.class, () -> userService.addUser(user1Request));
-        assertEquals("Username already exists, please choose another", exception.getMessage());
+        assertEquals("User with username More already exists", exception.getMessage());
     }
 
     @Test
@@ -99,11 +99,13 @@ public class UserServicesTest {
 
     @Test
     void deleteUser_whenUserExists_returnsVoid(){
-        when(userRepository.findById(eq(user1Id))).thenReturn(Optional.of(user1Entity));
+        when(userRepository.existsById(eq(user1Id))).thenReturn(true);
+        when(userRepository.findById(user1Id)).thenReturn(Optional.of(userEntityWithId));
         doNothing().when(userRepository).deleteById(user1Id);
 
         userService.deleteUser(user1Id);
 
+        verify(userRepository, times(1)).existsById(user1Id);
         verify(userRepository, times(1)).findById(user1Id);
         verify(userRepository, times(1)).deleteById(user1Id);
 
