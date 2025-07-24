@@ -29,9 +29,14 @@ public class DestinationController {
     }
 
     @GetMapping("/destinations/{id}")
-
     public ResponseEntity<DestinationResponse> getDestinationById(@PathVariable Long id) {
         DestinationResponse destinationResponse = destinationService.getDestinationById(id);
+        return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/destinations/title/{title}")
+    public ResponseEntity<DestinationResponse> getDestinationByTitle(@PathVariable String title) {
+        DestinationResponse destinationResponse = destinationService.getDestinationByTitle(title);
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
 

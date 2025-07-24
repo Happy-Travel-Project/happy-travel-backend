@@ -32,6 +32,12 @@ public class DestinationService {
         return DestinationMapper.toDto(destination);
     }
 
+    public DestinationResponse getDestinationByTitle(String title) {
+        Destination destination = destinationRepository.findByTitle(title)
+                .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "title", title));
+        return DestinationMapper.toDto(destination);
+    }
+
     public DestinationResponse addDestination(DestinationRequest destinationRequest) {
         if (destinationRepository.existsByTitle(destinationRequest.title())) {
             throw new EntityAlreadyExistsException(Destination.class.getSimpleName(), "title", destinationRequest.title());
