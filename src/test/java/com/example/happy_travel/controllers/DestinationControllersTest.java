@@ -2,12 +2,15 @@ package com.example.happy_travel.controllers;
 
 import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
+import com.example.happy_travel.dtos.user.UserRequest;
+import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.models.Destination;
 import com.example.happy_travel.services.DestinationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -121,5 +124,25 @@ public class DestinationControllersTest {
                 .andExpect(status().isBadRequest());
 
         verify(destinationService, never()).updateDestination(any(Long.class), any(DestinationRequest.class));
+    }
+
+    @Test
+    void addDestination_whenCorrectRequest_returnsDestinationResponse() throws Exception {
+
+        DestinationRequest request = new DestinationRequest("Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
+        DestinationResponse response = new DestinationResponse(1L,"Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
+
+        given(destinationService.addDestination(Mockito.any(DestinationRequest.class))).willReturn(response);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/destinations").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Eiffel Tower"))
+                .andExpect(jsonPath("$.country").value("France"))
+                .andExpect(jsonPath("$.city").value("Paris"))
+                .andExpect(jsonPath("$.image").value("https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg"))
+                .andExpect(jsonPath("$.description").value("Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it."));
     }
 }
