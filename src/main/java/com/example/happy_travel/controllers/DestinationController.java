@@ -28,6 +28,13 @@ public class DestinationController {
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
+    @GetMapping("/destinations/{id}")
+
+    public ResponseEntity<DestinationResponse> getDestinationById(@PathVariable Long id) {
+        DestinationResponse destinationResponse = destinationService.getDestinationById(id);
+        return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
+    }
+
     @PostMapping("/destinations")
     public ResponseEntity<DestinationResponse> addDestination(@Valid @RequestBody DestinationRequest destinationRequest) {
         DestinationResponse createdDestination = destinationService.addDestination(destinationRequest);

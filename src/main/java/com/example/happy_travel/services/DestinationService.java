@@ -26,6 +26,12 @@ public class DestinationService {
                 .toList();
     }
 
+    public DestinationResponse getDestinationById(Long id) {
+        Destination destination = destinationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
+        return DestinationMapper.toDto(destination);
+    }
+
     public DestinationResponse addDestination(DestinationRequest destinationRequest) {
         if (destinationRepository.existsByTitle(destinationRequest.title())) {
             throw new EntityAlreadyExistsException(Destination.class.getSimpleName(), "title", destinationRequest.title());
