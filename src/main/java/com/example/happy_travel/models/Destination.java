@@ -9,6 +9,9 @@ public class Destination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
+    private String title;
+
     @Column(nullable = false, length = 30)
     private String country;
 
@@ -22,14 +25,24 @@ public class Destination {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "destinations")
+    @JoinColumn(name = "user_id")
     private User user;
 
 
     public Destination() {
     }
 
-    public Destination(String country, String city, String image, String description) {
+    public Destination(String title, String country, String city, String image, String description) {
+       this.title = title;
+        this.country = country;
+        this.city = city;
+        this.image = image;
+        this.description = description;
+    }
+
+    public Destination(Long id, String title, String country, String city, String image, String description) {
+        this.id = id;
+        this.title = title;
         this.country = country;
         this.city = city;
         this.image = image;
@@ -38,6 +51,14 @@ public class Destination {
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCountry() {
