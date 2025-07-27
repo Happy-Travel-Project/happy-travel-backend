@@ -1,0 +1,176 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DestinationController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.happy_travel.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: DestinationController (com.example.happy_travel.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DestinationController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (10/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.happy_travel.controllers;
+&nbsp;
+&nbsp;import com.example.happy_travel.dtos.destination.DestinationRequest;
+&nbsp;import com.example.happy_travel.dtos.destination.DestinationResponse;
+&nbsp;import com.example.happy_travel.services.DestinationService;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;import java.util.List;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;&quot;)
+&nbsp;public class DestinationController {
+&nbsp;    private final DestinationService destinationService;
+&nbsp;
+<b class="fc">&nbsp;    public DestinationController(DestinationService destinationService) {</b>
+<b class="fc">&nbsp;        this.destinationService = destinationService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/destinations&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;DestinationResponse&gt;&gt; getAllDestinations() {
+<b class="fc">&nbsp;        List&lt;DestinationResponse&gt; destinations = destinationService.getAllDestinations();</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(destinations, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/destinations/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;DestinationResponse&gt; getDestinationById(@PathVariable Long id) {
+<b class="nc">&nbsp;        DestinationResponse destinationResponse = destinationService.getDestinationById(id);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(destinationResponse, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/destinations/title/{title}&quot;)
+&nbsp;    public ResponseEntity&lt;DestinationResponse&gt; getDestinationByTitle(@PathVariable String title) {
+<b class="nc">&nbsp;        DestinationResponse destinationResponse = destinationService.getDestinationByTitle(title);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(destinationResponse, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/destinations/city/{city}&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;DestinationResponse&gt;&gt; getDestinationByCity(@PathVariable String city) {
+<b class="nc">&nbsp;        List&lt;DestinationResponse&gt; destinationResponse = destinationService.getDestinationByCity(city);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(destinationResponse, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/destinations/country/{country}&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;DestinationResponse&gt;&gt; getDestinationByCountry(@PathVariable String country) {
+<b class="nc">&nbsp;        List&lt;DestinationResponse&gt; destinationResponse = destinationService.getDestinationByCountry(country);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(destinationResponse, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/destinations&quot;)
+&nbsp;    public ResponseEntity&lt;DestinationResponse&gt; addDestination(@Valid @RequestBody DestinationRequest destinationRequest) {
+<b class="fc">&nbsp;        DestinationResponse createdDestination = destinationService.addDestination(destinationRequest);</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(createdDestination, HttpStatus.CREATED);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/destinations/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;DestinationResponse&gt; updateDestination(@PathVariable Long id, @Valid @RequestBody DestinationRequest destinationRequest) {
+<b class="fc">&nbsp;        DestinationResponse updateDestination = destinationService.updateDestination(id, destinationRequest);</b>
+<b class="fc">&nbsp;        return ResponseEntity.ok(updateDestination);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/destinations/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; deleteDestination(@PathVariable Long id){
+<b class="fc">&nbsp;        destinationService.deleteDestination(id);</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-07-25 14:50</div>
+</div>
+</body>
+</html>
