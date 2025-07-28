@@ -7,15 +7,21 @@ import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.UserRepository;
+import com.example.happy_travel.security.CustomUserDetail;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     public final UserRepository userRepository;
+    public final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserResponse> getAllUsers() {
@@ -56,5 +62,12 @@ public class UserService {
         }
         getUserById(id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws EntityNotFoundException {
+        return userRepository.findByUsername(username)
+                .map(user -> new CustomUserDetail(user))
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "username", username));
     }
 }
