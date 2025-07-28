@@ -6,7 +6,9 @@ import com.example.happy_travel.dtos.destination.DestinationResponse;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
 import com.example.happy_travel.models.Destination;
+import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,8 +18,11 @@ public class DestinationService {
 
     public final DestinationRepository destinationRepository;
 
-    public DestinationService(DestinationRepository destinationRepository) {
+    public final UserService userService;
+
+    public DestinationService(DestinationRepository destinationRepository, UserService userService) {
         this.destinationRepository = destinationRepository;
+        this.userService = userService;
     }
 
     public List<DestinationResponse> getAllDestinations() {
@@ -59,17 +64,22 @@ public class DestinationService {
                 .collect(Collectors.toList());
     }
 
-    public DestinationResponse addDestination(DestinationRequest destinationRequest) {
+    @PreAuthorize("isAuthenticated()")
+    public DestinationResponse addDestination(DestinationRequest destinationRequest, User user) {
         if (destinationRepository.existsByTitle(destinationRequest.title())) {
             throw new EntityAlreadyExistsException(Destination.class.getSimpleName(), "title", destinationRequest.title());
         }
-        Destination newDestination = DestinationMapper.toEntity(destinationRequest);
+        Destination newDestination = DestinationMapper.toEntity(destinationRequest, user);
         Destination savedDestination = destinationRepository.save(newDestination);
         return DestinationMapper.toDto(savedDestination);
     }
 
-    public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest) {
+    @PreAuthorize("isAuthenticated()")
+    public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest, User user) {
         Destination updateDestination = destinationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
+        if (!updateDestination.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("You are not authorized to update this destination.");
+        }
         updateDestination.setTitle(destinationRequest.title());
         updateDestination.setCountry(destinationRequest.country());
         updateDestination.setCity(destinationRequest.city());
@@ -79,7 +89,8 @@ public class DestinationService {
 
         return DestinationMapper.toDto(newDestination);
     }
-
+//REVIEW
+    @PreAuthorize("isAuthenticated()")
     public void deleteDestination(Long id) {
         if (!destinationRepository.existsById(id)) {
             throw new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString());
