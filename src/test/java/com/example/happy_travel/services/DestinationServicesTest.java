@@ -109,13 +109,25 @@ public class DestinationServicesTest {
 
     @Test
     void deleteDestination_whenDestinationExists_returnsVoid(){
-        when(destinationRepository.findById(eq(destination1Id))).thenReturn(Optional.of(destination1Entity));
+        when(destinationRepository.existsById(destination1Id)).thenReturn(true);
         doNothing().when(destinationRepository).deleteById(destination1Id);
 
         destinationService.deleteDestination(destination1Id);
 
-        verify(destinationRepository, times(1)).findById(destination1Id);
+        verify(destinationRepository, times(1)).existsById(destination1Id);
         verify(destinationRepository, times(1)).deleteById(destination1Id);
+    }
 
+    @Test
+    void deleteDestination_whenDestinationDoesNotExist_throwsEntityNotFoundException(){
+        when(destinationRepository.existsById(notExistentId)).thenReturn(false);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> destinationService.deleteDestination(notExistentId));
+
+        assertEquals("Destination with id 5 was not found", exception.getMessage());
+
+        verify(destinationRepository, times(1)).existsById(notExistentId);
+        verify(destinationRepository, never()).deleteById(notExistentId);
     }
 }
