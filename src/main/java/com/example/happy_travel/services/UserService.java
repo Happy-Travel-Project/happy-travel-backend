@@ -17,9 +17,9 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
     public final UserRepository userRepository;
-    public final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -40,18 +40,21 @@ public class UserService implements UserDetailsService {
 
     public UserResponse addUser(UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.username())){
-        throw new EntityAlreadyExistsException(User.class.getSimpleName(), "username", userRequest.username());
+            throw new EntityAlreadyExistsException(User.class.getSimpleName(), "username", userRequest.username());
         }
         User newUser = UserMapper.toEntity(userRequest);
+        newUser.setPassword(passwordEncoder.encode(userRequest.password()));
         User savedUser = userRepository.save(newUser);
         return UserMapper.toDto(savedUser);
     }
 
+    //updateProfile
     public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User updatedUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "id",id.toString()));
+        User updatedUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "id", id.toString()));
         updatedUser.setUsername(userRequest.username());
         updatedUser.setEmail(userRequest.email());
-        updatedUser.setPassword(userRequest.password());
+        updatedUser.setPassword(passwordEncoder.encode(userRequest.password()));
         User newUser = userRepository.save(updatedUser);
         return UserMapper.toDto(newUser);
     }
