@@ -32,21 +32,31 @@ public class Destination {
     public Destination() {
     }
 
+    public Destination(String title, String country, String city, String image, String description, User user) {
+        this.title = title;
+        this.country = country;
+        this.city = city;
+        this.image = image;
+        this.description = description;
+        this.user = user;
+    }
+
     public Destination(String title, String country, String city, String image, String description) {
-       this.title = title;
+        this.title = title;
         this.country = country;
         this.city = city;
         this.image = image;
         this.description = description;
     }
 
-    public Destination(Long id, String title, String country, String city, String image, String description) {
+    public Destination(Long id, String title, String country, String city, String image, String description, User user) {
         this.id = id;
         this.title = title;
         this.country = country;
         this.city = city;
         this.image = image;
         this.description = description;
+        this.user = user;
     }
 
     public Long getId() {
@@ -92,6 +102,13 @@ public class Destination {
     public void setDescription(String description) {
         this.description = description;
     }
-}
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
 
