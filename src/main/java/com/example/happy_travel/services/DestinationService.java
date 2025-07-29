@@ -9,6 +9,7 @@ import com.example.happy_travel.models.Destination;
 import com.example.happy_travel.models.Role;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -39,7 +40,17 @@ public class DestinationService {
         return DestinationMapper.toDto(destination);
     }
 
-    public List<DestinationResponse> getDestinationsOfUser(Long userId) {
+    public List<DestinationResponse> getDestinationsOfUser(Long userId, User user) {
+        List<Destination> destinations = destinationRepository.findByUserId(userId);
+        return destinations.stream()
+                .map(DestinationMapper::toDto)
+                .toList();
+    }
+
+    public List<DestinationResponse> getDestinationsByUserId(Long userId, User user) {
+        if (!user.getRole().equals(Role.ADMIN) && !user.getId().equals(userId)) {
+            throw new SecurityException("You don't have permission to view these destinations");
+        }
         List<Destination> destinations = destinationRepository.findByUserId(userId);
         return destinations.stream()
                 .map(DestinationMapper::toDto)
