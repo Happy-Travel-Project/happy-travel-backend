@@ -6,6 +6,7 @@ import com.example.happy_travel.dtos.destination.DestinationResponse;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
 import com.example.happy_travel.models.Destination;
+import com.example.happy_travel.models.Role;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,7 +45,6 @@ public class DestinationService {
                 .map(DestinationMapper::toDto)
                 .toList();
     }
-
 
     public DestinationResponse getDestinationByTitle(String title) {
         Destination destination = destinationRepository.findByTitle(title)
@@ -97,12 +97,19 @@ public class DestinationService {
 
         return DestinationMapper.toDto(newDestination);
     }
-//REVIEW
+
     @PreAuthorize("isAuthenticated()")
-    public void deleteDestination(Long id) {
-        if (!destinationRepository.existsById(id)) {
-            throw new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString());
+    public void deleteDestination(Long id, User user) {
+        Destination destination = destinationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
+        if (user.getRole().equals(Role.ADMIN)) {
+            destinationRepository.deleteById(id);
+            return;
         }
-        destinationRepository.deleteById(id);
+        if (destination.getUser().getId().equals(user.getId())) {
+            destinationRepository.deleteById(id);
+        } else {
+            throw new SecurityException("You do not have permission to delete this destination.");
+        }
     }
 }
