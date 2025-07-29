@@ -44,8 +44,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/destinations/city/{city}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/destinations/country/{country}").permitAll()
 
+
                         .requestMatchers(HttpMethod.POST, "/destinations").hasRole("USER")
-                        .requestMatchers(HttpMethod.PUT, "/destinations/{id}").hasRole("USER")
 
                         .anyRequest().authenticated()
                 )
