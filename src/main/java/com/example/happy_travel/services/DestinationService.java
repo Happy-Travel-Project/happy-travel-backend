@@ -84,18 +84,20 @@ public class DestinationService {
 
     @PreAuthorize("isAuthenticated()")
     public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest, User user) {
-        Destination updateDestination = destinationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
-        if (!updateDestination.getUser().getId().equals(user.getId())) {
-            throw new SecurityException("You are not authorized to update this destination.");
-        }
-        updateDestination.setTitle(destinationRequest.title());
-        updateDestination.setCountry(destinationRequest.country());
-        updateDestination.setCity(destinationRequest.city());
-        updateDestination.setImage(destinationRequest.image());
-        updateDestination.setDescription(destinationRequest.description());
-        Destination newDestination = destinationRepository.save(updateDestination);
+        Destination updateDestination = destinationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
 
-        return DestinationMapper.toDto(newDestination);
+        if (user.getRole().equals(Role.ADMIN) || updateDestination.getUser().getId().equals(user.getId())) {
+            updateDestination.setTitle(destinationRequest.title());
+            updateDestination.setCountry(destinationRequest.country());
+            updateDestination.setCity(destinationRequest.city());
+            updateDestination.setImage(destinationRequest.image());
+            updateDestination.setDescription(destinationRequest.description());
+            Destination newDestination = destinationRepository.save(updateDestination);
+            return DestinationMapper.toDto(newDestination);
+        } else {
+            throw new SecurityException("You do not have permission to update this destination.");
+        }
     }
 
     @PreAuthorize("isAuthenticated()")
