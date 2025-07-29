@@ -86,32 +86,26 @@ public class DestinationService {
     public DestinationResponse updateDestination(Long id, DestinationRequest destinationRequest, User user) {
         Destination updateDestination = destinationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
-
-        if (user.getRole().equals(Role.ADMIN) || updateDestination.getUser().getId().equals(user.getId())) {
-            updateDestination.setTitle(destinationRequest.title());
-            updateDestination.setCountry(destinationRequest.country());
-            updateDestination.setCity(destinationRequest.city());
-            updateDestination.setImage(destinationRequest.image());
-            updateDestination.setDescription(destinationRequest.description());
-            Destination newDestination = destinationRepository.save(updateDestination);
-            return DestinationMapper.toDto(newDestination);
-        } else {
+        if (!user.getRole().equals(Role.ADMIN) && !updateDestination.getUser().getId().equals(user.getId())) {
             throw new SecurityException("You do not have permission to update this destination.");
+
         }
+        updateDestination.setTitle(destinationRequest.title());
+        updateDestination.setCountry(destinationRequest.country());
+        updateDestination.setCity(destinationRequest.city());
+        updateDestination.setImage(destinationRequest.image());
+        updateDestination.setDescription(destinationRequest.description());
+        Destination newDestination = destinationRepository.save(updateDestination);
+        return DestinationMapper.toDto(newDestination);
     }
 
     @PreAuthorize("isAuthenticated()")
     public void deleteDestination(Long id, User user) {
         Destination destination = destinationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "id", id.toString()));
-        if (user.getRole().equals(Role.ADMIN)) {
-            destinationRepository.deleteById(id);
-            return;
-        }
-        if (destination.getUser().getId().equals(user.getId())) {
-            destinationRepository.deleteById(id);
-        } else {
+        if (!user.getRole().equals(Role.ADMIN) && !destination.getUser().getId().equals(user.getId())) {
             throw new SecurityException("You do not have permission to delete this destination.");
         }
+        destinationRepository.deleteById(id);
     }
 }
