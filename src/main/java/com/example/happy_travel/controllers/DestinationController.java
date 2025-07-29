@@ -24,37 +24,37 @@ public class DestinationController {
     public DestinationController(DestinationService destinationService) {
         this.destinationService = destinationService;
     }
-//OK
+
     @GetMapping("/destinations")
     public ResponseEntity<List<DestinationResponse>> getAllDestinations() {
         List<DestinationResponse> destinations = destinationService.getAllDestinations();
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
-//ok
+
     @GetMapping("/destinations/{id}")
     public ResponseEntity<DestinationResponse> getDestinationById(@PathVariable Long id) {
         DestinationResponse destinationResponse = destinationService.getDestinationById(id);
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
-//ok
+
     @GetMapping("/destinations/title/{title}")
     public ResponseEntity<DestinationResponse> getDestinationByTitle(@PathVariable String title) {
         DestinationResponse destinationResponse = destinationService.getDestinationByTitle(title);
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
-    //ok
+
     @GetMapping("/destinations/city/{city}")
     public ResponseEntity<List<DestinationResponse>> getDestinationByCity(@PathVariable String city) {
         List<DestinationResponse> destinationResponse = destinationService.getDestinationByCity(city);
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
-    //ok
+
     @GetMapping("/destinations/country/{country}")
     public ResponseEntity<List<DestinationResponse>> getDestinationByCountry(@PathVariable String country) {
         List<DestinationResponse> destinationResponse = destinationService.getDestinationByCountry(country);
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
-//ok
+
     @PostMapping("/destinations")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DestinationResponse> addDestination(
@@ -63,18 +63,18 @@ public class DestinationController {
         DestinationResponse createdDestination = destinationService.addDestination(destinationRequest, userDetail.getUser());
         return new ResponseEntity<>(createdDestination, HttpStatus.CREATED);
     }
-// ok
+
     @PutMapping("/destinations/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DestinationResponse> updateDestination(@PathVariable Long id, @Valid @RequestBody DestinationRequest destinationRequest, @AuthenticationPrincipal CustomUserDetail userDetail) {
         DestinationResponse updateDestination = destinationService.updateDestination(id, destinationRequest, userDetail.getUser());
         return ResponseEntity.ok(updateDestination);
     }
-// REVIEW
+
     @DeleteMapping("/destinations/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> deleteDestination(@PathVariable Long id){
-        destinationService.deleteDestination(id);
+    public ResponseEntity<Object> deleteDestination(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetail userDetail) {
+        destinationService.deleteDestination(id, userDetail.getUser());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
