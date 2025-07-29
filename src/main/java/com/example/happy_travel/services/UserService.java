@@ -2,6 +2,7 @@ package com.example.happy_travel.services;
 
 import com.example.happy_travel.dtos.user.UserMapper;
 import com.example.happy_travel.dtos.user.UserRequest;
+import com.example.happy_travel.dtos.user.UserRequestByAdmin;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
 import com.example.happy_travel.exceptions.EntityNotFoundException;
@@ -48,7 +49,7 @@ public class UserService implements UserDetailsService {
         return UserMapper.toDto(savedUser);
     }
 
-    //updateProfile
+
     public UserResponse updateUser(Long id, UserRequest userRequest) {
         User updatedUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "id", id.toString()));
@@ -57,6 +58,14 @@ public class UserService implements UserDetailsService {
         updatedUser.setPassword(passwordEncoder.encode(userRequest.password()));
         User newUser = userRepository.save(updatedUser);
         return UserMapper.toDto(newUser);
+    }
+
+    public UserResponse updateUserByAdmin(Long id, UserRequestByAdmin userRequestByAdmin) {
+        User updatedUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "id", id.toString()));
+        UserMapper.toEntityFromAdmin(userRequestByAdmin, updatedUser);
+        User savedUser = userRepository.save(updatedUser);
+        return UserMapper.toDto(savedUser);
     }
 
     public void deleteUser(Long id) {

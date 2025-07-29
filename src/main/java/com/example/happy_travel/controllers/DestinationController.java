@@ -37,6 +37,13 @@ public class DestinationController {
         return new ResponseEntity<>(destinationResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/destinations/user")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<DestinationResponse>> getDestinationsOfUser(@AuthenticationPrincipal CustomUserDetail userDetail) {
+        List<DestinationResponse> destinations = destinationService.getDestinationsOfUser(userDetail.getUser().getId());
+        return new ResponseEntity<>(destinations, HttpStatus.OK);
+    }
+
     @GetMapping("/destinations/title/{title}")
     public ResponseEntity<DestinationResponse> getDestinationByTitle(@PathVariable String title) {
         DestinationResponse destinationResponse = destinationService.getDestinationByTitle(title);

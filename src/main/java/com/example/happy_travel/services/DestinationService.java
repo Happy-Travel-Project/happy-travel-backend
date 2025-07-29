@@ -39,6 +39,13 @@ public class DestinationService {
         return DestinationMapper.toDto(destination);
     }
 
+    public List<DestinationResponse> getDestinationsOfUser(Long userId) {
+        List<Destination> destinations = destinationRepository.findByUserId(userId);
+        return destinations.stream()
+                .map(DestinationMapper::toDto)
+                .toList();
+    }
+
     public DestinationResponse getDestinationByTitle(String title) {
         Destination destination = destinationRepository.findByTitle(title)
                 .orElseThrow(() -> new EntityNotFoundException(Destination.class.getSimpleName(), "title", title));
