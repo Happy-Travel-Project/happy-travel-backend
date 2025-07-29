@@ -1,6 +1,7 @@
 package com.example.happy_travel.controllers;
 
 import com.example.happy_travel.dtos.user.UserRequest;
+import com.example.happy_travel.dtos.user.UserRequestByAdmin;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.services.UserService;
 import jakarta.validation.Valid;
@@ -26,7 +27,6 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         UserResponse userResponse = userService.getUserResponseById(id);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
@@ -35,6 +35,12 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
         UserResponse updatedUser = userService.updateUser(id, userRequest);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("admin/users/{id}")
+    public ResponseEntity<UserResponse> updateUserByAdmin(@PathVariable Long id, @Valid @RequestBody UserRequestByAdmin userRequest) {
+        UserResponse updatedUser = userService.updateUserByAdmin(id, userRequest);
         return ResponseEntity.ok(updatedUser);
     }
 
