@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    public User(){
+    public User() {
     }
 
     public User(String username, String email, String password, Role role) {

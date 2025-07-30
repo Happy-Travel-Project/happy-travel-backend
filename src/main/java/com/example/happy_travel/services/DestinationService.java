@@ -3,15 +3,15 @@ package com.example.happy_travel.services;
 import com.example.happy_travel.dtos.destination.DestinationMapper;
 import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
-import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.exceptions.EntityAlreadyExistsException;
+import com.example.happy_travel.exceptions.EntityNotFoundException;
 import com.example.happy_travel.models.Destination;
 import com.example.happy_travel.models.Role;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.repositories.DestinationRepository;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

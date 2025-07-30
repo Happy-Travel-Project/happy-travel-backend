@@ -4,6 +4,7 @@ import com.example.happy_travel.dtos.destination.DestinationRequest;
 import com.example.happy_travel.dtos.destination.DestinationResponse;
 import com.example.happy_travel.dtos.user.UserResponse;
 import com.example.happy_travel.models.Destination;
+import com.example.happy_travel.models.Role;
 import com.example.happy_travel.models.User;
 import com.example.happy_travel.security.CustomUserDetail;
 import com.example.happy_travel.security.jwt.JwtService;
@@ -23,20 +24,20 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import com.example.happy_travel.models.Role;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
@@ -133,9 +134,9 @@ public class DestinationControllersTest {
     void addDestination_whenCorrectRequest_returnsDestinationResponse() throws Exception {
 
         DestinationRequest request = new DestinationRequest("Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.");
-        DestinationResponse response = new DestinationResponse(1L,"Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.", user1Response);
+        DestinationResponse response = new DestinationResponse(1L, "Eiffel Tower", "France", "Paris", "https://images.pexels.com/photos/1461974/pexels-photo-1461974.jpeg", "Built for the Universal Exhibition of 1889, the Eiffel Tower is undoubtedly ‘the’ symbol of Paris. At 330 metres high, it towers over the city from the Champ-de-Mars and visitors have marvelled at it for generations. With glittering lights at night and an ice rink in winter, it continues to innovate and amaze those who see it or climb it.", user1Response);
 
-        given(destinationService.addDestination(Mockito.any(DestinationRequest.class),Mockito.any(User.class))).willReturn(response);
+        given(destinationService.addDestination(Mockito.any(DestinationRequest.class), Mockito.any(User.class))).willReturn(response);
 
         String json = objectMapper.writeValueAsString(request);
 

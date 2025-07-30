@@ -22,34 +22,30 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("tests")
 public class AuthControllersTest {
 
+    private final String jwtToken = "jwt.test.token";
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private UserService userService;
-
     @MockBean
     private AuthenticationManager authenticationManager;
-
     @MockBean
     private JwtService jwtService;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     private UserRequest userRequest;
     private UserResponse userResponse;
-    private final String jwtToken = "jwt.test.token";
 
     @BeforeEach
     void setUp() {

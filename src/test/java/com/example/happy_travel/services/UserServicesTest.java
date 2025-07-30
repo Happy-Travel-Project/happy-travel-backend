@@ -111,7 +111,7 @@ public class UserServicesTest {
     }
 
     @Test
-    void deleteUser_whenUserExists_returnsVoid(){
+    void deleteUser_whenUserExists_returnsVoid() {
         when(userRepository.existsById(eq(user1Id))).thenReturn(true);
         when(userRepository.findById(user1Id)).thenReturn(Optional.of(userEntityWithId));
         doNothing().when(userRepository).deleteById(user1Id);
