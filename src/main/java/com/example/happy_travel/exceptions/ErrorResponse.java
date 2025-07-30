@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @JsonPropertyOrder({"timestamp", "status", "error", "message", "path"})
 public class ErrorResponse {
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime timestamp;
     private final int status;
     private final String error;
