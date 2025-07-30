@@ -1,6 +1,5 @@
 package com.example.happy_travel.security.jwt;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,13 +35,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String header = request.getHeader("Authorization");
-        if(header == null || !header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = header.replace("Bearer ", "");
-        if(jwtService.isValidToken(token)) {
+        if (jwtService.isValidToken(token)) {
             String username = jwtService.extractUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register (@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
         UserRequest userRequestWithRoleByDefault = new UserRequest(userRequest.username(), userRequest.email(), userRequest.password(), "USER");
         UserResponse userResponse = userService.addUser(userRequestWithRoleByDefault);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);

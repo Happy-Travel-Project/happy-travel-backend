@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -34,13 +35,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), "Id", id.toString()));
     }
 
-    public UserResponse getUserResponseById(Long id){
+    public UserResponse getUserResponseById(Long id) {
         User user = getUserById(id);
         return UserMapper.toDto(user);
     }
 
     public UserResponse addUser(UserRequest userRequest) {
-        if (userRepository.existsByUsername(userRequest.username())){
+        if (userRepository.existsByUsername(userRequest.username())) {
             throw new EntityAlreadyExistsException(User.class.getSimpleName(), "username", userRequest.username());
         }
         User newUser = UserMapper.toEntity(userRequest);
@@ -69,7 +70,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)){
+        if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException(User.class.getSimpleName(), "id", id.toString());
         }
         getUserById(id);

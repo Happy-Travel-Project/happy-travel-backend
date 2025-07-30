@@ -2,11 +2,11 @@ package com.example.happy_travel.security.jwt;
 
 import com.example.happy_travel.security.CustomUserDetail;
 import io.jsonwebtoken.Claims;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractUsername (String token) {
+    public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
