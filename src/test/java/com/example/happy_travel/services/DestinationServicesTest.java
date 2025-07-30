@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class DestinationServicesTest {
     private Destination destination1Entity;
     private Destination destination1EntityWithId;
     private Destination destination1EntityWithIdUpdated;
-    private  DestinationResponse destination1ExpectedResponse;
+    private DestinationResponse destination1ExpectedResponse;
     private DestinationRequest destination1Request;
     private DestinationRequest destination1UpdatedRequest;
     private Destination destination2Entity;
@@ -52,17 +53,17 @@ public class DestinationServicesTest {
         destination1Id = 1L;
         notExistentId = 5L;
         notExistentTitle = "Marte";
-        userResponse = new UserResponse(1L,"John Doe", "john@example.com","ROLE_USER");
-        user1 = new User("John Doe","john@example.com","2yU#2yU#", Role.USER);
-        user2 = new User(1L,"John Doe","john@example.com","2yU#2yU#", Role.USER);
-        destination1Entity = new Destination("A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.",user2);
-        destination1EntityWithId = new Destination(1L,"A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", user2);
-        destination1EntityWithIdUpdated = new Destination(1L,"A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", user2);
+        userResponse = new UserResponse(1L, "John Doe", "john@example.com", "ROLE_USER");
+        user1 = new User("John Doe", "john@example.com", "2yU#2yU#", Role.USER);
+        user2 = new User(1L, "John Doe", "john@example.com", "2yU#2yU#", Role.USER);
+        destination1Entity = new Destination("A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", user2);
+        destination1EntityWithId = new Destination(1L, "A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", user2);
+        destination1EntityWithIdUpdated = new Destination(1L, "A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", user2);
         destination1ExpectedResponse = new DestinationResponse(1L, "A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", userResponse);
         destination1Request = new DestinationRequest("A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
         destination1UpdatedRequest = new DestinationRequest("A wonderful trip for those who love nature and animals", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.");
         destination2Entity = new Destination("The northern lights in Norway", "Norway", "Lofoten", "https://images.lge.com.sg/images/product-placeholder.png", "Our bold claim is that this part of Norway, with its multiple islands, deep fjords and steep mountains, is among the world's most beautiful and interesting places in which to see the northern lights.", user2);
-        destination2ExpectedResponse = new DestinationResponse(1L,"A wonderful trip for those who love nature", "Brazil", "Ilha Grande","https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png","Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.",userResponse);
+        destination2ExpectedResponse = new DestinationResponse(1L, "A wonderful trip for those who love nature", "Brazil", "Ilha Grande", "https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", "Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", userResponse);
     }
 
     @Test
@@ -73,12 +74,12 @@ public class DestinationServicesTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("A wonderful trip for those who love nature",result.getFirst().title());
+        assertEquals("A wonderful trip for those who love nature", result.getFirst().title());
         assertEquals("Brazil", result.getFirst().country());
-        assertEquals("Ilha Grande",result.getFirst().city());
+        assertEquals("Ilha Grande", result.getFirst().city());
         assertEquals("https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-playas-brasil/destino/resize/V26_Brazil_IlhaGrande_VivaLATAM_NevinXavier1.png", result.getFirst().image());
         assertEquals("Ilha Grande – which literally translates to Big Island – is a tropical island just off the coast of Rio de Janeiro state and is about 160 kilometers from Copacabana. It is an island defined by its white beaches and clear blue waters. It is also a car-free zone.", result.getFirst().description());
-        assertEquals("The northern lights in Norway",result.get(1).title());
+        assertEquals("The northern lights in Norway", result.get(1).title());
         assertEquals("Norway", result.get(1).country());
         assertEquals("Lofoten", result.get(1).city());
         assertEquals("https://images.lge.com.sg/images/product-placeholder.png", result.get(1).image());
@@ -88,9 +89,9 @@ public class DestinationServicesTest {
     }
 
     @Test
-    void  addDestination_whenTitleAlreadyExists_throwsException(){
+    void addDestination_whenTitleAlreadyExists_throwsException() {
         when(destinationRepository.existsByTitle(destination1Request.title())).thenReturn(true);
-        Exception exception = assertThrows(RuntimeException.class, () -> destinationService.addDestination(destination1Request,user1));
+        Exception exception = assertThrows(RuntimeException.class, () -> destinationService.addDestination(destination1Request, user1));
         assertEquals("Destination with title A wonderful trip for those who love nature already exists", exception.getMessage());
     }
 
@@ -113,7 +114,7 @@ public class DestinationServicesTest {
     }
 
     @Test
-    void updateDestination_whenDestinationDoesNotExists_returnsEntityNotFoundException(){
+    void updateDestination_whenDestinationDoesNotExists_returnsEntityNotFoundException() {
         when(destinationRepository.findById(notExistentId)).thenReturn(Optional.empty());
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.updateDestination(notExistentId, destination1UpdatedRequest, user2));
@@ -125,26 +126,26 @@ public class DestinationServicesTest {
     }
 
     @Test
-    void deleteDestination_whenDestinationExists_returnsVoid(){
-        when(destinationRepository.existsById(destination1Id)).thenReturn(true);
+    void deleteDestination_whenDestinationExists_returnsVoid() {
+
+        when(destinationRepository.findById(destination1Id)).thenReturn(Optional.of(destination1EntityWithId));
         doNothing().when(destinationRepository).deleteById(destination1Id);
 
-        destinationService.deleteDestination(destination1Id);
+        destinationService.deleteDestination(destination1Id, user2);
 
-        verify(destinationRepository, times(1)).existsById(destination1Id);
+        verify(destinationRepository, times(1)).findById(destination1Id);
         verify(destinationRepository, times(1)).deleteById(destination1Id);
     }
 
     @Test
-    void deleteDestination_whenDestinationDoesNotExist_throwsEntityNotFoundException(){
-        when(destinationRepository.existsById(notExistentId)).thenReturn(false);
+    void deleteDestination_whenDestinationDoesNotExist_throwsEntityNotFoundException() {
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> destinationService.deleteDestination(notExistentId));
+        when(destinationRepository.findById(notExistentId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.deleteDestination(notExistentId, user2));
 
         assertEquals("Destination with id 5 was not found", exception.getMessage());
-
-        verify(destinationRepository, times(1)).existsById(notExistentId);
+        verify(destinationRepository, times(1)).findById(notExistentId);
         verify(destinationRepository, never()).deleteById(notExistentId);
     }
 
@@ -163,8 +164,7 @@ public class DestinationServicesTest {
     void getDestinationById_whenDestinationDoesNotExist_throwsEntityNotFoundException() {
         when(destinationRepository.findById(notExistentId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> destinationService.getDestinationById(notExistentId));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.getDestinationById(notExistentId));
         assertEquals("Destination with id 5 was not found", exception.getMessage());
         verify(destinationRepository, times(1)).findById(notExistentId);
     }
@@ -173,8 +173,7 @@ public class DestinationServicesTest {
     void getDestinationByTitle_whenDestinationDoesNotExist_throwsEntityNotFoundException() {
         when(destinationRepository.findByTitle(notExistentTitle)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> destinationService.getDestinationByTitle(notExistentTitle));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.getDestinationByTitle(notExistentTitle));
         assertEquals("Destination with title Marte was not found", exception.getMessage());
         verify(destinationRepository, times(1)).findByTitle(notExistentTitle);
     }
@@ -184,8 +183,7 @@ public class DestinationServicesTest {
         String notExistentCity = "Asgard";
         when(destinationRepository.findByCityIgnoreCase(notExistentCity)).thenReturn(List.of());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> destinationService.getDestinationByCity(notExistentCity));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.getDestinationByCity(notExistentCity));
         assertEquals("Destination with city Asgard was not found", exception.getMessage());
         verify(destinationRepository, times(1)).findByCityIgnoreCase(notExistentCity);
     }
@@ -195,8 +193,7 @@ public class DestinationServicesTest {
         String notExistentCountry = "Wakanda";
         when(destinationRepository.findByCountryIgnoreCase(notExistentCountry)).thenReturn(List.of());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> destinationService.getDestinationByCountry(notExistentCountry));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> destinationService.getDestinationByCountry(notExistentCountry));
         assertEquals("Destination with country Wakanda was not found", exception.getMessage());
         verify(destinationRepository, times(1)).findByCountryIgnoreCase(notExistentCountry);
     }
