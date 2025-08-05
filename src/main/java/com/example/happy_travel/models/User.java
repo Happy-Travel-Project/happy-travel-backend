@@ -16,7 +16,6 @@ public class User {
     private String username;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
-    @Column(nullable = false, unique = true, length = 30)
     private List<Destination> destinations;
 
     @Column(nullable = false, unique = true, length = 50)
