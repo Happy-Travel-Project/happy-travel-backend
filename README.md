@@ -2,7 +2,7 @@
 
 A robust REST API for managing users and travel destinations, built with **Spring Boot** and modern Java technologies. Ideal for platforms that allow users to explore, register, and manage travel experiences.
 
-![Java](https://img.shields.io/badge/Java-17-blue?style=flat-square)  
+![Java](https://img.shields.io/badge/Java-21-blue?style=flat-square)  
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.4-brightgreen?style=flat-square)  
 ![Maven](https://img.shields.io/badge/Maven-3.8.1-blue?style=flat-square)  
 ![REST API](https://img.shields.io/badge/API-RESTful-orange?style=flat-square)
@@ -43,7 +43,7 @@ A robust REST API for managing users and travel destinations, built with **Sprin
 
 Make sure you have the following installed:
 
-- Java 17+
+- Java 21+
 - Maven 3.8+
 - MySQL 8+
 - Git
